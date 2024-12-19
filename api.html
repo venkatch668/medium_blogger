@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title> api </title>
+    </head>
+    <body>
+        <h1>hello world </h1>
+        <script>
+            // fetch("https://jsonplaceholder.typicode.com/users" )
+            // .then((res)=>res.json())
+            // .then((res)=>console.log(res))
+
+
+            fetch("https://jsonplaceholder.typicode.com/users",{
+                method:"POST",
+                body:""
+            } )
+            .then((res)=>res.json())
+            .then((res)=>console.log(res))
+
+        </script>
+    </body>
+</html>

@@ -1,6 +1,8 @@
 const express = require("express");
+var cors = require('cors')
+
 const app = express();
-const port = 6000;
+const port = 6060;
 app.use(express.json());
 const mysql = require('mysql2');
 
@@ -12,14 +14,14 @@ const connection = mysql.createConnection({
   });
 
 const db = connection.promise()
-
-app.get("/", async (req, res) =>{
+app.use(cors());
+app.get("/users", async (req, res) =>{
     const [results] = await db.query("select * from user");
     console.log(results);
     res.send(results);
 });
 
-app.post("/", async (req, res)=>{
+app.post("/users", async (req, res)=>{
     const { id, name, password, email, dob} = req.body;
     const [results] = await db.query('insert into user(id, name, password, email,dob) values(?,?,?,?,?)',[id, name, password, email,  dob]);
     console.log(results);
@@ -27,7 +29,7 @@ app.post("/", async (req, res)=>{
     res.send("account created successfully");
 })
 
-app.put("/", async (req, res)=>{
+app.put("/users", async (req, res)=>{
     const { id, name, password, email, dob} = req.body;
 
     const [results] = await db.query(`update user set password='${password}' where id=${id}`);
@@ -35,8 +37,10 @@ app.put("/", async (req, res)=>{
     res.send("account updated successfully");
 })
 
-app.delete("/", async (req, res)=>{
+app.delete("/users", async (req, res)=>{
     const { id } = req.body;
+    console.log("id-nodejs", id);
+
     const [results] = await db.query(`delete from user where id=${id}`);
     res.send("account delete successfully");
 })

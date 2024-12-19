@@ -12,7 +12,7 @@ import "./styles.css";
 // const place="hyderbad";
 // place="mumbai";
 
-export function Product({imgpath, name}){
+export default function Product({imgpath, name}){
     const [addedToCart, setAddToCart ] = useState();
 
     useEffect(()=>{
