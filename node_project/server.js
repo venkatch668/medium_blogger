@@ -1,23 +1,43 @@
 const express = require("express");
 const app = express();
-const port = 5000;
+const port = 6000;
 app.use(express.json());
+const mysql = require('mysql2');
 
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    database: 'user',
+    password:"root"
+  });
 
+const db = connection.promise()
 
-app.get("/", (req, res) =>{
-    res.send(" Hello world");
+app.get("/", async (req, res) =>{
+    const [results] = await db.query("select * from user");
+    console.log(results);
+    res.send(results);
 });
 
-app.post("/", (req, res)=>{
+app.post("/", async (req, res)=>{
+    const { id, name, password, email, dob} = req.body;
+    const [results] = await db.query('insert into user(id, name, password, email,dob) values(?,?,?,?,?)',[id, name, password, email,  dob]);
+    console.log(results);
+
     res.send("account created successfully");
 })
 
-app.put("/", (req, res)=>{
+app.put("/", async (req, res)=>{
+    const { id, name, password, email, dob} = req.body;
+
+    const [results] = await db.query(`update user set password='${password}' where id=${id}`);
+
     res.send("account updated successfully");
 })
 
-app.delete("/", (req, res)=>{
+app.delete("/", async (req, res)=>{
+    const { id } = req.body;
+    const [results] = await db.query(`delete from user where id=${id}`);
     res.send("account delete successfully");
 })
 
